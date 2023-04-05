@@ -20,11 +20,13 @@ else
 if longcond and strategy.position_size < 2
     strategy.entry("롱", strategy.long)
 if exit and strategy.position_size < 2
-    strategy.exit("롱", comment="롱종료",stop = long_stop_price)
+    if long_stop_price
+        strategy.close("롱", comment="롱정리)
 
 if longcond and strategy.position_size < 2
     alert("롱진입",alert.freq_once_per_bar_close)
 if exit and strategy.position_size < 2
-    alert("롱정리",alert.freq_once_per_bar_close)
-if long_stop_price and strategy.position_size < 2
-    alert("롱정리",alert.freq_once_per_bar_close)
+    alert("RSI50돌파",alert.freq_once_per_bar_close)
+if exit and strategy.position_size < 2
+        if long_stop_price
+            alert("롱정리",alert.freq_once_per_bar_close)
