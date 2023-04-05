@@ -2,7 +2,7 @@
 // © Dabinlee
 
 //@version=5
-strategy("bst3일부보완2",overlay=true,margin_long=100,initial_capital = 1000,process_orders_on_close = true,default_qty_type = strategy.percent_of_equity,default_qty_value = 100, pyramiding = 3, commission_value = 0.03)
+strategy("bst3일부보완2",overlay=true,margin_long=100,initial_capital = 1000,process_orders_on_close = true,default_qty_type = strategy.percent_of_equity,default_qty_value = 100, pyramiding = 1, commission_value = 0.02)
 
 rsi = ta.rsi(close,14)
 
