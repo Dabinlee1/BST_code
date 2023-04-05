@@ -65,9 +65,12 @@ if bull and strategy.opentrades == 0
     if strategy.position_size ==0
         strategy.exit("손익절", "롱", stop = stopP, limit = limitP, comment_profit = "익절",comment_loss ="손절")
 
+
+//수정완료 
 if bull and strategy.opentrades == 0
-    alert("정배열", alert.freq_once_per_bar_close)
-else if stopP
-    alert("손절", alert.freq_once_per_bar_close)
-else if limitP
-    alert("익절", alert.freq_once_per_bar_close)
+	alert("포지션진입", alert.freq_once_per_bar_close) 
+	if stopP 
+		alert("손절", alert.freq_once_per_bar_close) 
+	if limitP
+		alert("익절", alert.freq_once_per_bar_close)
+        
