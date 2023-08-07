@@ -1,0 +1,21 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © Dabinlee
+
+//@version=5
+strategy("BST4", overlay=true, margin_long=100, margin_short=100)
+
+cci= ta.cci(close,20)
+rsi= ta.rsi(close,14)
+bb_length = input.int(20)
+bb_mult = input.int(2)
+
+[middle, upper, lower] = ta.bb(close,bb_length, bb_mult)
+
+long_cond = ta.crossover(close,lower) and cci < -100 and rsi < 30
+short_cond = ta.crossunder(close,upper) and cci > 100 and rsi >70
+alert = long_cond or short_cond
+
+if long_cond
+    alert("알트5분롱", alert.freq_once_per_bar_close)
+else if short_cond
+    alert("알트5분숏", alert.freq_once_per_bar_close)
