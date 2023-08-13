@@ -2,20 +2,21 @@
 // © Dabinlee
 
 //@version=5
-strategy("BST4", overlay=true, margin_long=100, margin_short=100)
+strategy("알트 전략", overlay=true, margin_long=100, margin_short=100)
 
-cci= ta.cci(close,20)
-rsi= ta.rsi(close,14)
-bb_length = input.int(20)
-bb_mult = input.int(2)
+length = 20
+mult = 2
 
-[middle, upper, lower] = ta.bb(close,bb_length, bb_mult)
+cciValue = ta.cci(close, length)
+rsiValue = ta.rsi(close, 14)
 
-long_cond = ta.crossover(close,lower) and cci < -100 and rsi < 30
-short_cond = ta.crossunder(close,upper) and cci > 100 and rsi >70
-alert = long_cond or short_cond
+[middle, upper, lower] = ta.bb(close, length, mult)
 
-if long_cond
+cciCond = cciValue < -120
+rsiCond = rsiValue < 30
+
+longCond = ta.crossover(close, lower) and cciCond and rsiCond
+
+plotshape(series=longCond, style=shape.triangleup, location=location.belowbar, color=color.green, size=size.small) 
+if longCond
     alert("알트5분롱", alert.freq_once_per_bar_close)
-else if short_cond
-    alert("알트5분숏", alert.freq_once_per_bar_close)
