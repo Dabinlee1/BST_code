@@ -1,0 +1,61 @@
+//@version=5
+// © Dabinlee
+strategy(title='비트코인 도미전략', overlay=true, default_qty_type = strategy.percent_of_equity, default_qty_value = 100,initial_capital = 1000,commission_value = 0.07)
+
+len1 = input(20)
+len2 = input(40)
+len3 = input(80)
+ma_num = input.int(0, minval=0, maxval=5, title='0:sma 1:ema 2:rema 3:wma 4:vwma')
+
+mma(len) =>
+    ma = close
+    if ma_num == 0
+        ma := ta.vwma(close, len)
+        ma
+    if ma_num == 1
+        ma := ta.ema(close, len)
+        ma
+    if ma_num == 2
+        ma := (ta.sma(close,len) + ta.rma(close, len))/2
+        ma
+    if ma_num == 3
+        ma := ta.wma(close, len)
+        ma
+    if ma_num == 4
+        ma := ta.vwma(close, len)
+        ma
+
+    ma
+
+ma1 = mma(len1)
+ma2 = mma(len2)
+ma3 = mma(len3)
+
+//atr
+L_multi = input.float(3, "multi", step = 0.1)
+S_multi = input.float(4.5, "multi", step = 0.1)
+atr = ta.atr(14)
+limitP = high + atr*L_multi
+stopP = low -atr*S_multi
+
+
+long_trail_stop_percent = input.float(2.5, "롱 스탑 트레일")/100
+
+
+long_stop_price = 0.0
+long_take_price = 0.0
+
+
+bull = ma1 > ma2 and ma2 > ma3
+if bull and strategy.opentrades == 0 
+    strategy.entry("롱", strategy.long)
+    strategy.exit("포지션정리", "롱", stop = close * (1-long_trail_stop_percent), limit = limitP)
+if strategy.position_size > 0 // 롱 포지션이 있으면
+    stop_value = close * (1-long_trail_stop_percent)
+    long_stop_price := math.max(stop_value, long_stop_price[1])
+else
+    long_stop_price := 0.0 // 롱 스탑을 무력화
+
+if strategy.position_size > 0
+    strategy.exit("포지션정리", "롱", stop = long_stop_price, limit =  limitP)
+plot(strategy.position_size > 0 ? long_stop_price : na, style = plot.style_linebr, color = color.red, linewidth = 2)
